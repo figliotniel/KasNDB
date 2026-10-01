@@ -307,6 +307,9 @@ async function loadData() {
       pembayaranStore.fetchAll(selectedTahun.value),
       kasStore.fetchSettings()
     ])
+    console.log('✅ Data pembayaran loaded:', pembayaranStore.pembayarans.length, 'records')
+  } catch (err) {
+    console.error('❌ Error loading pembayaran:', err)
   } finally {
     loading.value = false
   }
