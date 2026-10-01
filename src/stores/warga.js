@@ -56,6 +56,14 @@ export const useWargaStore = defineStore('warga', () => {
     loading.value = true
     error.value = null
     try {
+      // Cek apakah nomor rumah sudah terdaftar di Firestore
+      const sudahAda = wargas.value.some(
+        w => w.nomorRumah.toLowerCase() === data.nomorRumah.toLowerCase()
+      )
+      if (sudahAda) {
+        throw { code: 'local/duplicate', message: 'Nomor rumah ini sudah terdaftar.' }
+      }
+
       // Buat akun Firebase Auth dengan email format: nomorRumah@kasndb.app
       const email = `${data.nomorRumah.toLowerCase()}@kasndb.app`
       const userCredential = await createUserWithEmailAndPassword(
@@ -67,7 +75,7 @@ export const useWargaStore = defineStore('warga', () => {
 
       // Simpan data warga ke Firestore
       const docRef = await addDoc(collection(db, 'warga'), {
-        nomorRumah: data.nomorRumah,
+        nomorRumah: data.nomorRumah.toUpperCase(),
         namaDepan: data.namaDepan,
         namaLengkap: data.namaLengkap,
         noHp: data.noHp || '',
@@ -81,7 +89,7 @@ export const useWargaStore = defineStore('warga', () => {
       // Tambahkan ke state lokal
       wargas.value.push({
         id: docRef.id,
-        nomorRumah: data.nomorRumah,
+        nomorRumah: data.nomorRumah.toUpperCase(),
         namaDepan: data.namaDepan,
         namaLengkap: data.namaLengkap,
         noHp: data.noHp || '',
@@ -90,7 +98,16 @@ export const useWargaStore = defineStore('warga', () => {
 
       return docRef.id
     } catch (err) {
-      error.value = 'Gagal menambah warga: ' + err.message
+      // Terjemahkan error ke pesan bahasa Indonesia
+      let pesan = err.message
+      if (err.code === 'auth/email-already-in-use' || err.code === 'local/duplicate') {
+        pesan = 'Nomor rumah ini sudah terdaftar. Gunakan nomor rumah yang berbeda.'
+      } else if (err.code === 'auth/weak-password') {
+        pesan = 'Nama depan terlalu pendek (min. 6 karakter) untuk digunakan sebagai kata sandi.'
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        pesan = 'Password admin salah. Silakan login ulang sebagai admin.'
+      }
+      error.value = 'Gagal menambah warga: ' + pesan
       // Pastikan admin re-login jika terjadi error setelah create user
       if (adminEmail && adminPassword) {
         try {
@@ -99,11 +116,12 @@ export const useWargaStore = defineStore('warga', () => {
           console.error('Gagal re-login admin:', reLoginErr)
         }
       }
-      throw err
+      throw new Error(pesan)
     } finally {
       loading.value = false
     }
   }
+
 
   /**
    * Update data warga berdasarkan document ID
