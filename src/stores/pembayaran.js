@@ -62,29 +62,21 @@ export const usePembayaranStore = defineStore('pembayaran', () => {
     loading.value = true
     error.value = null
     try {
-      let q
-      if (tahun) {
-        q = query(
-          collection(db, 'pembayaran'),
-          where('wargaId', '==', uid),
-          where('tahun', '==', tahun),
-          orderBy('bulan')
-        )
-      } else {
-        q = query(
-          collection(db, 'pembayaran'),
-          where('wargaId', '==', uid),
-          orderBy('tahun'),
-          orderBy('bulan')
-        )
-      }
+      // Gunakan filter sederhana tanpa orderBy untuk menghindari kebutuhan composite index
+      let constraints = [where('wargaId', '==', uid)]
+      if (tahun) constraints.push(where('tahun', '==', tahun))
+
+      const q = query(collection(db, 'pembayaran'), ...constraints)
       const snapshot = await getDocs(q)
-      pembayarans.value = snapshot.docs.map(d => ({
+
+      // Sort client-side berdasarkan bulan
+      const results = snapshot.docs.map(d => ({
         id: d.id,
         ...d.data(),
         tanggal: d.data().tanggal?.toDate() || null,
         createdAt: d.data().createdAt?.toDate() || null
       }))
+      pembayarans.value = results.sort((a, b) => a.bulan - b.bulan)
     } catch (err) {
       error.value = 'Gagal memuat data pembayaran: ' + err.message
       throw err
