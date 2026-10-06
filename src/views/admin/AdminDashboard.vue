@@ -30,6 +30,16 @@
           >
             <AppIcon name="cog" className="w-5 h-5" />
           </button>
+          <!-- Button Logout -->
+          <button
+            type="button"
+            @click="showLogoutConfirm = true"
+            class="p-2 rounded-xl text-zinc-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+            title="Keluar dari Akun Admin"
+            aria-label="Keluar"
+          >
+            <AppIcon name="logout" className="w-5 h-5" />
+          </button>
           <!-- Tahun Aktif Pill -->
           <div class="px-2.5 py-1 rounded-xl bg-zinc-100 text-zinc-700 text-xs font-semibold">
             {{ tahun }}
@@ -235,6 +245,18 @@
           </div>
         </router-link>
       </div>
+
+      <!-- Tombol Keluar dari Akun Admin -->
+      <div class="pt-1">
+        <button
+          type="button"
+          @click="showLogoutConfirm = true"
+          class="w-full py-3.5 px-4 bg-white hover:bg-rose-50/70 border border-zinc-200/80 hover:border-rose-200 text-zinc-600 hover:text-rose-600 rounded-2xl text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-150 shadow-xs active:scale-[0.99]"
+        >
+          <AppIcon name="logout" className="w-4 h-4 text-zinc-400 group-hover:text-rose-600" />
+          <span>Keluar dari Akun Admin</span>
+        </button>
+      </div>
     </main>
 
     <!-- Modal Quick Pay -->
@@ -355,8 +377,32 @@
           <span v-if="savingSettings" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span>{{ savingSettings ? 'Menyimpan...' : 'Simpan Pengaturan' }}</span>
         </button>
+
+        <!-- Opsi Keluar dari Pengaturan -->
+        <div class="pt-2 border-t border-zinc-100">
+          <button
+            type="button"
+            @click="showSettingsModal = false; showLogoutConfirm = true"
+            class="w-full py-2.5 px-3 text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+          >
+            <AppIcon name="logout" className="w-4 h-4 text-rose-500" />
+            <span>Keluar dari Akun Admin</span>
+          </button>
+        </div>
       </form>
     </Modal>
+
+    <!-- Dialog Konfirmasi Logout Admin -->
+    <ConfirmDialog
+      :is-open="showLogoutConfirm"
+      title="Keluar dari Akun Admin"
+      message="Apakah Anda yakin ingin mengakhiri sesi administrator KasNDB dan kembali ke halaman login?"
+      confirmText="Ya, Keluar"
+      cancelText="Batal"
+      type="danger"
+      @confirm="handleLogout"
+      @cancel="showLogoutConfirm = false"
+    />
 
     <!-- Bottom Navigation Admin -->
     <BottomNav role="admin" />
@@ -365,6 +411,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
 import { useWargaStore } from '@/stores/warga.js'
 import { usePembayaranStore } from '@/stores/pembayaran.js'
 import { usePengeluaranStore } from '@/stores/pengeluaran.js'
@@ -373,7 +421,10 @@ import BottomNav from '@/components/BottomNav.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import Modal from '@/components/Modal.vue'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
+const router = useRouter()
+const authStore = useAuthStore()
 const wargaStore = useWargaStore()
 const pembayaranStore = usePembayaranStore()
 const pengeluaranStore = usePengeluaranStore()
@@ -382,6 +433,23 @@ const kasStore = useKasStore()
 const loading = ref(true)
 const tahun = new Date().getFullYear()
 const bulanSekarang = new Date().getMonth() + 1
+
+const showLogoutConfirm = ref(false)
+const loggingOut = ref(false)
+
+async function handleLogout() {
+  loggingOut.value = true
+  try {
+    await authStore.logout()
+    showLogoutConfirm.value = false
+    router.push('/login')
+  } catch (err) {
+    console.error('Error logging out:', err)
+    alert('Gagal keluar: ' + (err.message || 'Terjadi kesalahan'))
+  } finally {
+    loggingOut.value = false
+  }
+}
 
 const showPayModal = ref(false)
 const selectedWarga = ref(null)
