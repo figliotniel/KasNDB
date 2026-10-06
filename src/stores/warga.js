@@ -11,11 +11,13 @@ import {
   orderBy,
   serverTimestamp
 } from 'firebase/firestore'
+import { initializeApp, deleteApp } from 'firebase/app'
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  getAuth,
+  signOut
 } from 'firebase/auth'
-import { db, auth } from '@/firebase/config.js'
+import { db, app } from '@/firebase/config.js'
 
 // Store untuk manajemen data warga perumahan
 export const useWargaStore = defineStore('warga', () => {
@@ -44,78 +46,86 @@ export const useWargaStore = defineStore('warga', () => {
 
   /**
    * Tambah warga baru:
-   * 1. Buat akun Firebase Auth untuk warga
-   * 2. Simpan data ke Firestore
-   * 3. Login kembali sebagai admin
+   * 1. Buat akun Firebase Auth untuk warga via secondary app (tanpa mengganggu sesi admin)
+   * 2. Simpan data warga ke Firestore
    *
    * @param {Object} data - Data warga (nomorRumah, namaDepan, namaLengkap, noHp)
-   * @param {string} adminEmail - Email admin untuk re-login
-   * @param {string} adminPassword - Password admin untuk re-login
    */
-  async function add(data, adminEmail, adminPassword) {
+  async function add(data) {
     loading.value = true
     error.value = null
     try {
+      const cleanNomor = (data.nomorRumah || '').trim().replace(/\s+/g, '').toUpperCase()
+      const cleanNamaDepan = (data.namaDepan || '').trim()
+
+      if (!cleanNomor) {
+        throw { code: 'local/invalid', message: 'Nomor rumah wajib diisi.' }
+      }
+      if (!cleanNamaDepan) {
+        throw { code: 'local/invalid', message: 'Nama depan wajib diisi.' }
+      }
+      if (cleanNamaDepan.length < 6) {
+        throw { code: 'auth/weak-password', message: 'Nama depan minimal 6 karakter untuk digunakan sebagai kata sandi.' }
+      }
+
       // Cek apakah nomor rumah sudah terdaftar di Firestore
       const sudahAda = wargas.value.some(
-        w => w.nomorRumah.toLowerCase() === data.nomorRumah.toLowerCase()
+        w => (w.nomorRumah || '').toLowerCase() === cleanNomor.toLowerCase()
       )
       if (sudahAda) {
         throw { code: 'local/duplicate', message: 'Nomor rumah ini sudah terdaftar.' }
       }
 
-      // Buat akun Firebase Auth dengan email format: nomorRumah@kasndb.app
-      const email = `${data.nomorRumah.toLowerCase()}@kasndb.app`
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        data.namaDepan
-      )
-      const uid = userCredential.user.uid
+      // Buat akun Firebase Auth via secondary app instance agar sesi login admin tetap aman
+      const email = `${cleanNomor.toLowerCase()}@kasndb.app`
+      const secondaryAppName = `userCreator-${Date.now()}`
+      const secondaryApp = initializeApp(app.options, secondaryAppName)
+      const secondaryAuth = getAuth(secondaryApp)
+
+      let uid = ''
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          secondaryAuth,
+          email,
+          cleanNamaDepan
+        )
+        uid = userCredential.user.uid
+        await signOut(secondaryAuth)
+      } finally {
+        await deleteApp(secondaryApp)
+      }
 
       // Simpan data warga ke Firestore
       const docRef = await addDoc(collection(db, 'warga'), {
-        nomorRumah: data.nomorRumah.toUpperCase(),
-        namaDepan: data.namaDepan,
-        namaLengkap: data.namaLengkap,
-        noHp: data.noHp || '',
+        nomorRumah: cleanNomor,
+        namaDepan: cleanNamaDepan,
+        namaLengkap: (data.namaLengkap || '').trim(),
+        noHp: (data.noHp || '').trim(),
         uid: uid,
         createdAt: serverTimestamp()
       })
 
-      // Login kembali sebagai admin setelah membuat akun warga
-      await signInWithEmailAndPassword(auth, adminEmail, adminPassword)
-
       // Tambahkan ke state lokal
       wargas.value.push({
         id: docRef.id,
-        nomorRumah: data.nomorRumah.toUpperCase(),
-        namaDepan: data.namaDepan,
-        namaLengkap: data.namaLengkap,
-        noHp: data.noHp || '',
+        nomorRumah: cleanNomor,
+        namaDepan: cleanNamaDepan,
+        namaLengkap: (data.namaLengkap || '').trim(),
+        noHp: (data.noHp || '').trim(),
         uid: uid
       })
 
       return docRef.id
     } catch (err) {
-      // Terjemahkan error ke pesan bahasa Indonesia
       let pesan = err.message
       if (err.code === 'auth/email-already-in-use' || err.code === 'local/duplicate') {
         pesan = 'Nomor rumah ini sudah terdaftar. Gunakan nomor rumah yang berbeda.'
       } else if (err.code === 'auth/weak-password') {
         pesan = 'Nama depan terlalu pendek (min. 6 karakter) untuk digunakan sebagai kata sandi.'
-      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        pesan = 'Password admin salah. Silakan login ulang sebagai admin.'
+      } else if (err.code === 'auth/invalid-email') {
+        pesan = 'Format nomor rumah tidak valid untuk email akun.'
       }
       error.value = 'Gagal menambah warga: ' + pesan
-      // Pastikan admin re-login jika terjadi error setelah create user
-      if (adminEmail && adminPassword) {
-        try {
-          await signInWithEmailAndPassword(auth, adminEmail, adminPassword)
-        } catch (reLoginErr) {
-          console.error('Gagal re-login admin:', reLoginErr)
-        }
-      }
       throw new Error(pesan)
     } finally {
       loading.value = false
@@ -125,6 +135,9 @@ export const useWargaStore = defineStore('warga', () => {
 
   /**
    * Update data warga berdasarkan document ID
+   * CATATAN: Mengubah namaDepan TIDAK mengubah password Firebase Auth.
+   * Warga tetap login menggunakan namaDepan yang LAMA.
+   * Untuk mengubah password, diperlukan Firebase Admin SDK (server-side).
    */
   async function update(id, data) {
     loading.value = true

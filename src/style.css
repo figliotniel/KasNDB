@@ -1,25 +1,51 @@
-/* Stylesheet utama - hanya berisi Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles */
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply font-sans bg-gray-50 text-gray-900 antialiased;
+    @apply font-sans bg-zinc-50 text-zinc-900 antialiased selection:bg-emerald-100 selection:text-emerald-900;
+    min-height: 100vh;
   }
 
   * {
     -webkit-tap-highlight-color: transparent;
   }
+
+  /* Prevent automatic iOS Safari zoom-in by ensuring inputs have at least 16px font-size */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  @media (min-width: 640px) {
+    input, select, textarea {
+      font-size: 0.875rem; /* 14px on desktop */
+    }
+  }
 }
 
 @layer utilities {
-  /* Safe area untuk notch/home indicator di iOS */
+  /* Safe areas for iOS & modern mobile displays */
   .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.25rem);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
   }
   .mb-safe {
     margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Custom subtle scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

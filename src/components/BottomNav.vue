@@ -1,8 +1,8 @@
 <template>
-  <!-- Komponen BottomNav - navigasi bawah untuk mobile -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-30 pb-safe">
-    <!-- Navigasi Admin -->
-    <div v-if="role === 'admin'" class="flex items-center justify-around px-1 py-2">
+  <!-- Modern Mobile Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-zinc-200/80 z-30 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.02)]">
+    <!-- Admin Navigation (5 tabs) -->
+    <div v-if="role === 'admin'" class="max-w-md mx-auto grid grid-cols-5 px-1 py-1.5">
       <router-link
         v-for="item in adminNav"
         :key="item.to"
@@ -11,24 +11,32 @@
         v-slot="{ isActive, navigate }"
       >
         <button
+          type="button"
           @click="navigate"
           :class="[
-            'flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors duration-150 min-w-0',
-            isActive ? 'text-primary-600' : 'text-gray-400 hover:text-gray-600'
+            'flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all duration-150 min-h-[48px]',
+            isActive
+              ? 'text-emerald-600 font-semibold'
+              : 'text-zinc-400 hover:text-zinc-600 font-medium'
           ]"
         >
-          <span class="text-xl leading-none">{{ item.icon }}</span>
-          <span :class="['text-xs font-medium truncate', isActive ? 'text-primary-600' : 'text-gray-400']">
+          <div
+            :class="[
+              'p-1 rounded-lg transition-colors',
+              isActive ? 'bg-emerald-50 text-emerald-600' : 'text-zinc-400'
+            ]"
+          >
+            <AppIcon :name="item.icon" className="w-5 h-5" :strokeWidth="isActive ? 2.2 : 1.8" />
+          </div>
+          <span class="text-[10px] leading-tight mt-0.5 truncate max-w-full">
             {{ item.label }}
           </span>
-          <!-- Indikator aktif -->
-          <span v-if="isActive" class="w-1 h-1 rounded-full bg-primary-500 mt-0.5"></span>
         </button>
       </router-link>
     </div>
 
-    <!-- Navigasi Warga -->
-    <div v-else class="flex items-center justify-around px-2 py-2">
+    <!-- Warga Navigation (3 tabs) -->
+    <div v-else class="max-w-md mx-auto grid grid-cols-3 px-4 py-1.5">
       <router-link
         v-for="item in wargaNav"
         :key="item.to"
@@ -37,17 +45,26 @@
         v-slot="{ isActive, navigate }"
       >
         <button
+          type="button"
           @click="navigate"
           :class="[
-            'flex flex-col items-center gap-0.5 px-6 py-1.5 rounded-xl transition-colors duration-150',
-            isActive ? 'text-primary-600' : 'text-gray-400 hover:text-gray-600'
+            'flex flex-col items-center justify-center py-1.5 px-2 rounded-xl transition-all duration-150 min-h-[48px]',
+            isActive
+              ? 'text-emerald-600 font-semibold'
+              : 'text-zinc-400 hover:text-zinc-600 font-medium'
           ]"
         >
-          <span class="text-2xl leading-none">{{ item.icon }}</span>
-          <span :class="['text-xs font-medium', isActive ? 'text-primary-600' : 'text-gray-400']">
+          <div
+            :class="[
+              'p-1.5 rounded-xl transition-colors',
+              isActive ? 'bg-emerald-50 text-emerald-600' : 'text-zinc-400'
+            ]"
+          >
+            <AppIcon :name="item.icon" className="w-5 h-5" :strokeWidth="isActive ? 2.2 : 1.8" />
+          </div>
+          <span class="text-[11px] leading-tight mt-0.5">
             {{ item.label }}
           </span>
-          <span v-if="isActive" class="w-1 h-1 rounded-full bg-primary-500 mt-0.5"></span>
         </button>
       </router-link>
     </div>
@@ -55,8 +72,9 @@
 </template>
 
 <script setup>
-// Props: role menentukan tampilan navigasi (admin atau warga)
-const props = defineProps({
+import AppIcon from './AppIcon.vue'
+
+defineProps({
   role: {
     type: String,
     default: 'warga',
@@ -64,19 +82,19 @@ const props = defineProps({
   }
 })
 
-// Menu navigasi untuk admin
+// Menu untuk admin
 const adminNav = [
-  { to: '/admin', icon: '🏠', label: 'Home' },
-  { to: '/admin/warga', icon: '👥', label: 'Warga' },
-  { to: '/admin/pembayaran', icon: '💰', label: 'Bayar' },
-  { to: '/admin/pengeluaran', icon: '💸', label: 'Keluar' },
-  { to: '/laporan', icon: '📊', label: 'Laporan' }
+  { to: '/admin', icon: 'home', label: 'Ringkasan' },
+  { to: '/admin/warga', icon: 'users', label: 'Warga' },
+  { to: '/admin/pembayaran', icon: 'wallet', label: 'Kas Masuk' },
+  { to: '/admin/pengeluaran', icon: 'receipt', label: 'Kas Keluar' },
+  { to: '/laporan', icon: 'chart', label: 'Laporan' }
 ]
 
-// Menu navigasi untuk warga
+// Menu untuk warga (publik)
 const wargaNav = [
-  { to: '/', icon: '🏠', label: 'Home' },
-  { to: '/laporan', icon: '📊', label: 'Laporan' },
-  { to: '/profil', icon: '👤', label: 'Profil' }
+  { to: '/', icon: 'home', label: 'Beranda' },
+  { to: '/laporan', icon: 'chart', label: 'Laporan Kas' },
+  { to: '/profil', icon: 'user', label: 'Profil Saya' }
 ]
 </script>

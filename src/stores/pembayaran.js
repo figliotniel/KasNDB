@@ -9,7 +9,6 @@ import {
   doc,
   query,
   where,
-  orderBy,
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore'
@@ -98,7 +97,7 @@ export const usePembayaranStore = defineStore('pembayaran', () => {
 
       const docData = {
         nomorRumah: data.nomorRumah,
-        wargaId: data.wargaId,
+        wargaId: data.wargaId || '',
         bulan: Number(data.bulan),
         tahun: Number(data.tahun),
         jumlah: Number(data.jumlah),

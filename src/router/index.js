@@ -70,16 +70,7 @@ router.beforeEach(async (to, from, next) => {
 
   // Tunggu inisialisasi auth selesai
   if (authStore.loading) {
-    await new Promise(resolve => {
-      const unwatch = authStore.$subscribe(() => {
-        if (!authStore.loading) {
-          unwatch()
-          resolve()
-        }
-      })
-      // Timeout fallback
-      setTimeout(resolve, 3000)
-    })
+    await authStore.init()
   }
 
   const isAuthenticated = !!authStore.user

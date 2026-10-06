@@ -9,7 +9,6 @@ import {
   doc,
   query,
   where,
-  orderBy,
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore'
@@ -29,27 +28,29 @@ export const usePengeluaranStore = defineStore('pengeluaran', () => {
     loading.value = true
     error.value = null
     try {
-      let q
+      let constraints = []
       if (tahun) {
         // Filter berdasarkan rentang tahun (1 Jan - 31 Des)
         const startDate = Timestamp.fromDate(new Date(tahun, 0, 1))
         const endDate = Timestamp.fromDate(new Date(tahun, 11, 31, 23, 59, 59))
-        q = query(
-          collection(db, 'pengeluaran'),
-          where('tanggal', '>=', startDate),
-          where('tanggal', '<=', endDate),
-          orderBy('tanggal', 'desc')
-        )
-      } else {
-        q = query(collection(db, 'pengeluaran'), orderBy('tanggal', 'desc'))
+        constraints.push(where('tanggal', '>=', startDate))
+        constraints.push(where('tanggal', '<=', endDate))
       }
+      const q = query(collection(db, 'pengeluaran'), ...constraints)
       const snapshot = await getDocs(q)
-      pengeluarans.value = snapshot.docs.map(d => ({
+
+      // Sort client-side untuk menghindari kebutuhan composite index
+      const results = snapshot.docs.map(d => ({
         id: d.id,
         ...d.data(),
         tanggal: d.data().tanggal?.toDate() || null,
         createdAt: d.data().createdAt?.toDate() || null
       }))
+      pengeluarans.value = results.sort((a, b) => {
+        if (!a.tanggal) return 1
+        if (!b.tanggal) return -1
+        return b.tanggal - a.tanggal
+      })
     } catch (err) {
       error.value = 'Gagal memuat data pengeluaran: ' + err.message
       throw err

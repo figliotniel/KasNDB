@@ -1,39 +1,45 @@
 <template>
-  <!-- Halaman Login KasNDB -->
-  <div class="min-h-screen bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center px-4 py-8">
-    <div class="w-full max-w-sm">
-      <!-- Header / Logo -->
-      <div class="text-center mb-8">
-        <div class="text-6xl mb-3">🏠</div>
-        <h1 class="text-3xl font-bold text-white">KasNDB</h1>
-        <p class="text-primary-100 mt-1 text-sm">Kas Perumahan NDB</p>
+  <!-- Halaman Login KasNDB - Clean, Simple, Mobile-First -->
+  <div class="min-h-screen bg-zinc-50 flex flex-col justify-between px-4 py-8 sm:py-12">
+    <div class="w-full max-w-sm mx-auto my-auto">
+      <!-- App Header / Logo -->
+      <div class="text-center mb-7">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 mb-3.5">
+          <AppIcon name="building" className="w-7 h-7" />
+        </div>
+        <h1 class="text-2xl font-bold text-zinc-900 tracking-tight">KasNDB</h1>
+        <p class="text-xs text-zinc-500 mt-1">Sistem Iuran & Transparansi Kas Perumahan</p>
       </div>
 
-      <!-- Card Login -->
-      <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <!-- Tab Selector -->
-        <div class="flex border-b border-gray-100">
+      <!-- Card Container -->
+      <div class="bg-white rounded-2xl shadow-sm border border-zinc-200/80 overflow-hidden">
+        <!-- Segmented Tab Selector -->
+        <div class="p-1.5 bg-zinc-100/80 border-b border-zinc-200/60 grid grid-cols-2 gap-1">
           <button
+            type="button"
             @click="activeTab = 'warga'"
             :class="[
-              'flex-1 py-3.5 text-sm font-semibold transition-colors duration-200',
+              'py-2 px-3 text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all duration-150',
               activeTab === 'warga'
-                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-emerald-700 shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-800'
             ]"
           >
-            👤 Warga
+            <AppIcon name="user" className="w-4 h-4" />
+            <span>Warga</span>
           </button>
           <button
+            type="button"
             @click="activeTab = 'admin'"
             :class="[
-              'flex-1 py-3.5 text-sm font-semibold transition-colors duration-200',
+              'py-2 px-3 text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all duration-150',
               activeTab === 'admin'
-                ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-emerald-700 shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-800'
             ]"
           >
-            🔑 Admin
+            <AppIcon name="shield" className="w-4 h-4" />
+            <span>Pengurus / Admin</span>
           </button>
         </div>
 
@@ -41,110 +47,164 @@
           <!-- Form Login Warga -->
           <form v-if="activeTab === 'warga'" @submit.prevent="handleWargaLogin" class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label class="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1.5">
                 Nomor Rumah
               </label>
-              <input
-                v-model="wargaForm.nomorRumah"
-                type="text"
-                placeholder="Contoh: C10"
-                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm uppercase"
-                :disabled="loadingWarga"
-                required
-              />
-              <p class="text-xs text-gray-400 mt-1">Sesuai nomor rumah Anda (A1, B5, C10, dst)</p>
+              <div class="relative">
+                <input
+                  v-model="wargaForm.nomorRumah"
+                  type="text"
+                  placeholder="Contoh: C10, B4"
+                  autocomplete="username"
+                  class="w-full px-3.5 py-3 bg-zinc-50/50 border border-zinc-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-zinc-900 placeholder:text-zinc-400 uppercase transition-all"
+                  :disabled="loadingWarga"
+                  required
+                />
+              </div>
+              <p class="text-[11px] text-zinc-400 mt-1">Nomor rumah Anda terdaftar sebagai ID akun</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                Nama Depan
-              </label>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-xs font-semibold text-zinc-700 uppercase tracking-wider">
+                  Nama Depan (Kata Sandi)
+                </label>
+              </div>
               <div class="relative">
                 <input
                   v-model="wargaForm.namaDepan"
                   :type="showPassword ? 'text' : 'password'"
-                  placeholder="Nama depan Anda"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm pr-12"
+                  placeholder="Masukkan nama depan Anda"
+                  autocomplete="current-password"
+                  class="w-full pl-3.5 pr-11 py-3 bg-zinc-50/50 border border-zinc-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-zinc-900 placeholder:text-zinc-400 transition-all"
                   :disabled="loadingWarga"
                   required
                 />
                 <button
                   type="button"
                   @click="showPassword = !showPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-600 rounded-lg transition-colors"
+                  aria-label="Tampilkan sandi"
                 >
-                  {{ showPassword ? '🙈' : '👁️' }}
+                  <AppIcon :name="showPassword ? 'eye-off' : 'eye'" className="w-4 h-4" />
                 </button>
               </div>
-              <p class="text-xs text-gray-400 mt-1">Kata sandi = nama depan Anda</p>
+              <p class="text-[11px] text-zinc-400 mt-1">Kata sandi default adalah nama depan Anda</p>
             </div>
 
             <!-- Pesan Error -->
-            <div v-if="errorWarga" class="bg-red-50 border border-red-200 rounded-xl p-3">
-              <p class="text-red-600 text-xs">{{ errorWarga }}</p>
+            <div v-if="errorWarga" class="bg-rose-50 border border-rose-200/80 rounded-xl p-3 flex items-start gap-2.5 text-rose-700 text-xs">
+              <AppIcon name="info" className="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-500" />
+              <p class="leading-relaxed">{{ errorWarga }}</p>
             </div>
 
             <button
               type="submit"
               :disabled="loadingWarga"
-              class="w-full py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-300 text-white font-semibold rounded-xl transition-colors duration-200 text-sm flex items-center justify-center gap-2"
+              class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-emerald-300 text-white font-semibold rounded-xl transition-colors text-sm flex items-center justify-center gap-2 shadow-sm shadow-emerald-600/10 min-h-[46px]"
             >
               <span v-if="loadingWarga" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              {{ loadingWarga ? 'Memuat...' : 'Masuk' }}
+              <span>{{ loadingWarga ? 'Memverifikasi...' : 'Masuk ke Portal Warga' }}</span>
             </button>
+
+            <!-- Bantuan Login Warga -->
+            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-500">
+              <button
+                type="button"
+                @click="showHelpModal = true"
+                class="hover:text-emerald-700 underline text-[11px]"
+              >
+                Butuh bantuan login?
+              </button>
+              <span class="text-[11px] text-zinc-400">Kas RT/RW Terbuka</span>
+            </div>
           </form>
 
           <!-- Form Login Admin -->
           <form v-else @submit.prevent="handleAdminLogin" class="space-y-4">
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-2">
-              <p class="text-amber-700 text-xs text-center">🔐 Akses khusus administrator</p>
+            <div class="bg-emerald-50/70 border border-emerald-100 rounded-xl p-3 flex items-center gap-2.5">
+              <AppIcon name="shield" className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <p class="text-xs text-emerald-800 leading-tight">
+                Akses khusus pengurus RT / bendahara kas perumahan
+              </p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                Kata Sandi Admin
+              <label class="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1.5">
+                Kata Sandi Administrator
               </label>
               <div class="relative">
                 <input
                   v-model="adminForm.password"
                   :type="showAdminPassword ? 'text' : 'password'"
-                  placeholder="Masukkan kata sandi admin"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm pr-12"
+                  placeholder="Masukkan sandi admin"
+                  autocomplete="current-password"
+                  class="w-full pl-3.5 pr-11 py-3 bg-zinc-50/50 border border-zinc-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-zinc-900 placeholder:text-zinc-400 transition-all"
                   :disabled="loadingAdmin"
                   required
                 />
                 <button
                   type="button"
                   @click="showAdminPassword = !showAdminPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-600 rounded-lg transition-colors"
+                  aria-label="Tampilkan sandi"
                 >
-                  {{ showAdminPassword ? '🙈' : '👁️' }}
+                  <AppIcon :name="showAdminPassword ? 'eye-off' : 'eye'" className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
             <!-- Pesan Error -->
-            <div v-if="errorAdmin" class="bg-red-50 border border-red-200 rounded-xl p-3">
-              <p class="text-red-600 text-xs">{{ errorAdmin }}</p>
+            <div v-if="errorAdmin" class="bg-rose-50 border border-rose-200/80 rounded-xl p-3 flex items-start gap-2.5 text-rose-700 text-xs">
+              <AppIcon name="info" className="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-500" />
+              <p class="leading-relaxed">{{ errorAdmin }}</p>
             </div>
 
             <button
               type="submit"
               :disabled="loadingAdmin"
-              class="w-full py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-300 text-white font-semibold rounded-xl transition-colors duration-200 text-sm flex items-center justify-center gap-2"
+              class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-emerald-300 text-white font-semibold rounded-xl transition-colors text-sm flex items-center justify-center gap-2 shadow-sm shadow-emerald-600/10 min-h-[46px]"
             >
               <span v-if="loadingAdmin" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              {{ loadingAdmin ? 'Memuat...' : 'Masuk sebagai Admin' }}
+              <span>{{ loadingAdmin ? 'Memverifikasi...' : 'Masuk sebagai Admin' }}</span>
             </button>
           </form>
         </div>
       </div>
 
-      <!-- Footer -->
-      <p class="text-center text-primary-200 text-xs mt-6">
-        © {{ new Date().getFullYear() }} KasNDB — Perumahan NDB
-      </p>
+      <!-- Footer info -->
+      <div class="text-center mt-6 space-y-1">
+        <p class="text-xs text-zinc-400">
+          KasNDB © {{ new Date().getFullYear() }} — Transparansi Keuangan Warga
+        </p>
+      </div>
     </div>
+
+    <!-- Modal Bantuan Login Warga -->
+    <Modal :is-open="showHelpModal" title="Panduan Masuk Warga" @close="showHelpModal = false">
+      <div class="space-y-3 text-xs sm:text-sm text-zinc-600">
+        <div class="p-3 bg-zinc-50 rounded-xl border border-zinc-200/80 space-y-2">
+          <div class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">1</span>
+            <p><strong>Nomor Rumah</strong>: Masukkan nomor rumah Anda (contoh: <code class="bg-zinc-200 px-1 py-0.5 rounded text-zinc-800">C10</code> atau <code class="bg-zinc-200 px-1 py-0.5 rounded text-zinc-800">A5</code>).</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">2</span>
+            <p><strong>Kata Sandi</strong>: Masukkan nama depan Anda yang telah didaftarkan pengurus RT.</p>
+          </div>
+        </div>
+        <p class="text-xs text-zinc-500">
+          Jika nomor rumah belum terdaftar atau lupa nama depan yang didaftarkan, silakan hubungi pengurus atau bendahara RT untuk dibuatkan akun.
+        </p>
+        <button
+          type="button"
+          @click="showHelpModal = false"
+          class="w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 font-semibold text-zinc-700 rounded-xl text-xs transition-colors mt-2"
+        >
+          Tutup Panduan
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -152,32 +212,26 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
+import AppIcon from '@/components/AppIcon.vue'
+import Modal from '@/components/Modal.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
-// State untuk tab aktif
 const activeTab = ref('warga')
-
-// State visibility password
 const showPassword = ref(false)
 const showAdminPassword = ref(false)
+const showHelpModal = ref(false)
 
-// Form data
 const wargaForm = ref({ nomorRumah: '', namaDepan: '' })
 const adminForm = ref({ password: '' })
 
-// Loading state
 const loadingWarga = ref(false)
 const loadingAdmin = ref(false)
 
-// Error messages
 const errorWarga = ref('')
 const errorAdmin = ref('')
 
-/**
- * Handle login untuk warga
- */
 async function handleWargaLogin() {
   errorWarga.value = ''
   loadingWarga.value = true
@@ -194,9 +248,6 @@ async function handleWargaLogin() {
   }
 }
 
-/**
- * Handle login untuk admin
- */
 async function handleAdminLogin() {
   errorAdmin.value = ''
   loadingAdmin.value = true
@@ -204,7 +255,7 @@ async function handleAdminLogin() {
     await authStore.loginAdmin(adminForm.value.password)
     router.push('/admin')
   } catch (err) {
-    errorAdmin.value = authStore.error || 'Login gagal. Periksa kata sandi admin Anda.'
+    errorAdmin.value = authStore.error || 'Kata sandi admin salah. Silakan coba lagi.'
   } finally {
     loadingAdmin.value = false
   }

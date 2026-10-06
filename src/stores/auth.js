@@ -7,6 +7,8 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/firebase/config.js'
 
+const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || 'admin@kasndb.app').toLowerCase()
+
 // Store untuk manajemen autentikasi pengguna
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -26,8 +28,10 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     loading.value = true
     try {
-      const email = `${nomorRumah.toLowerCase()}@kasndb.app`
-      const result = await signInWithEmailAndPassword(auth, email, namaDepan)
+      const cleanNomor = (nomorRumah || '').trim().replace(/\s+/g, '').toLowerCase()
+      const cleanNama = (namaDepan || '').trim()
+      const email = `${cleanNomor}@kasndb.app`
+      const result = await signInWithEmailAndPassword(auth, email, cleanNama)
       user.value = result.user
       isAdmin.value = false
       return result.user
@@ -40,13 +44,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
-   * Login untuk admin - menggunakan email admin@kasndb.app
+   * Login untuk admin - menggunakan email admin
    */
   async function loginAdmin(password) {
     error.value = null
     loading.value = true
     try {
-      const result = await signInWithEmailAndPassword(auth, 'admin@kasndb.app', password)
+      const result = await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password)
       user.value = result.user
       isAdmin.value = true
       return result.user
@@ -72,16 +76,24 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  let unsubscribeAuth = null
+  let initPromise = null
+
   /**
    * Inisialisasi listener auth state - dipanggil saat app dimuat
+   * Mengembalikan Promise yang sama jika dipanggil lebih dari sekali
    */
   function init() {
-    return new Promise(resolve => {
-      onAuthStateChanged(auth, (currentUser) => {
+    if (initPromise) return initPromise
+
+    initPromise = new Promise(resolve => {
+      if (unsubscribeAuth) {
+        unsubscribeAuth()
+      }
+      unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
         if (currentUser) {
           user.value = currentUser
-          // Cek apakah email adalah admin
-          isAdmin.value = currentUser.email === 'admin@kasndb.app'
+          isAdmin.value = currentUser.email?.toLowerCase() === ADMIN_EMAIL
         } else {
           user.value = null
           isAdmin.value = false
@@ -90,6 +102,8 @@ export const useAuthStore = defineStore('auth', () => {
         resolve(currentUser)
       })
     })
+
+    return initPromise
   }
 
   /**
