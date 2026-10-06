@@ -1,6 +1,6 @@
 <template>
   <!-- Halaman Kelola Pengeluaran (Kas Keluar) -->
-  <div class="min-h-screen bg-zinc-50 pb-28">
+  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
     <!-- Header App Bar -->
     <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
       <div class="max-w-md mx-auto px-4 pt-3.5 pb-3">

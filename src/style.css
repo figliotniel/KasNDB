@@ -10,7 +10,7 @@
 
   body {
     @apply font-sans bg-zinc-50 text-zinc-900 antialiased selection:bg-emerald-100 selection:text-emerald-900;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   * {

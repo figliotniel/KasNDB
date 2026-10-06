@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-zinc-50 font-sans text-zinc-900 flex flex-col selection:bg-emerald-100 selection:text-emerald-900">
+  <div class="min-h-[100dvh] bg-zinc-50 font-sans text-zinc-900 flex flex-col selection:bg-emerald-100 selection:text-emerald-900">
     <RouterView v-if="!authLoading" />
     <!-- Loading screen saat inisialisasi auth -->
-    <div v-else class="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
+    <div v-else class="min-h-[100dvh] flex items-center justify-center bg-zinc-50 px-4">
       <div class="text-center flex flex-col items-center">
         <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-4 animate-pulse">
           <AppIcon name="building" className="w-7 h-7" />

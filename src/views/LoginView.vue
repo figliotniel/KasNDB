@@ -1,6 +1,6 @@
 <template>
   <!-- Halaman Login KasNDB - Clean, Simple, Mobile-First -->
-  <div class="min-h-screen bg-zinc-50 flex flex-col justify-between px-4 py-8 sm:py-12">
+  <div class="min-h-[100dvh] bg-zinc-50 flex flex-col justify-between px-4 py-8 sm:py-12">
     <div class="w-full max-w-sm mx-auto my-auto">
       <!-- App Header / Logo -->
       <div class="text-center mb-7">

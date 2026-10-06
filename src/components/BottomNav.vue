@@ -1,6 +1,6 @@
 <template>
   <!-- Modern Mobile Bottom Navigation -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-zinc-200/80 z-30 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.02)]">
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-zinc-200/80 z-40 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.02)]">
     <!-- Admin Navigation (5 tabs) -->
     <div v-if="role === 'admin'" class="max-w-md mx-auto grid grid-cols-5 px-1 py-1.5">
       <router-link
