@@ -1,17 +1,17 @@
 <template>
   <!-- Halaman Laporan Kas - Clean, Mobile-First, Transparan untuk Admin & Warga -->
-  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-50/50 via-white to-zinc-50 pb-28">
     <!-- Header App Bar -->
-    <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
+    <header class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 sticky top-0 z-20 pt-safe shadow-lg shadow-emerald-900/10">
       <div class="max-w-md mx-auto px-4 pt-3.5 pb-3">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-800 flex items-center justify-center">
-              <AppIcon name="chart" className="w-4 h-4 text-emerald-600" />
+            <div class="w-8 h-8 rounded-xl bg-white/20 text-white flex items-center justify-center">
+              <AppIcon name="chart" className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h1 class="text-base font-bold text-zinc-900 leading-tight">Laporan Keuangan</h1>
-              <p class="text-[11px] text-zinc-400">Transparansi arus kas perumahan</p>
+              <h1 class="text-base font-bold text-white leading-tight">Laporan Keuangan</h1>
+              <p class="text-[11px] text-emerald-100/80">Transparansi arus kas perumahan</p>
             </div>
           </div>
 
@@ -20,9 +20,9 @@
             type="button"
             @click="exportPDF"
             :disabled="loading || exporting"
-            class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-emerald-300 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+            class="flex items-center gap-1.5 px-3 py-1.5 bg-white text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 disabled:opacity-50 text-xs font-semibold rounded-xl shadow-sm transition-colors"
           >
-            <span v-if="exporting" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            <span v-if="exporting" class="w-3.5 h-3.5 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin"></span>
             <AppIcon v-else name="download" className="w-3.5 h-3.5" />
             <span>{{ exporting ? 'Menyusun...' : 'Unduh PDF' }}</span>
           </button>
@@ -34,25 +34,25 @@
             <select
               v-model="tahun"
               @change="loadData"
-              class="w-full pl-3 pr-8 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold text-zinc-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 appearance-none transition-all"
+              class="w-full pl-3 pr-8 py-2.5 bg-white/15 border border-white/20 rounded-xl text-xs font-semibold text-white focus:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/30 appearance-none transition-all"
             >
-              <option v-for="y in tahunOptions" :key="y" :value="y">
+              <option v-for="y in tahunOptions" :key="y" :value="y" class="text-zinc-800">
                 Tahun Buku {{ y }}
               </option>
             </select>
-            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
               <AppIcon name="chevron-down" className="w-3.5 h-3.5" />
             </div>
           </div>
 
           <!-- View Mode Toggle (Mobile Friendly) -->
-          <div class="flex p-0.5 bg-zinc-100 rounded-xl border border-zinc-200/60">
+          <div class="flex p-0.5 bg-white/15 rounded-xl border border-white/20">
             <button
               type="button"
               @click="viewMode = 'card'"
               :class="[
                 'px-2.5 py-1 text-xs font-medium rounded-lg transition-all',
-                viewMode === 'card' ? 'bg-white text-zinc-900 shadow-xs font-semibold' : 'text-zinc-500'
+                viewMode === 'card' ? 'bg-white text-emerald-700 shadow-xs font-semibold' : 'text-white/80 hover:text-white'
               ]"
               title="Tampilan Kartu"
             >
@@ -63,7 +63,7 @@
               @click="viewMode = 'table'"
               :class="[
                 'px-2.5 py-1 text-xs font-medium rounded-lg transition-all',
-                viewMode === 'table' ? 'bg-white text-zinc-900 shadow-xs font-semibold' : 'text-zinc-500'
+                viewMode === 'table' ? 'bg-white text-emerald-700 shadow-xs font-semibold' : 'text-white/80 hover:text-white'
               ]"
               title="Tampilan Tabel Matriks"
             >
@@ -84,7 +84,7 @@
       <!-- 3 Kartu Ringkasan Finansial -->
       <div class="grid grid-cols-3 gap-2">
         <!-- Pemasukan -->
-        <div class="bg-white rounded-2xl p-3 border border-zinc-200/80 shadow-xs text-center space-y-0.5">
+        <div class="bg-white rounded-2xl p-3 border border-emerald-100 shadow-sm text-center space-y-0.5">
           <div class="flex items-center justify-center gap-1 text-[11px] text-zinc-500">
             <AppIcon name="arrow-down-left" className="w-3 h-3 text-emerald-600" />
             <span>Masuk</span>
@@ -95,7 +95,7 @@
         </div>
 
         <!-- Pengeluaran -->
-        <div class="bg-white rounded-2xl p-3 border border-zinc-200/80 shadow-xs text-center space-y-0.5">
+        <div class="bg-white rounded-2xl p-3 border border-rose-100 shadow-sm text-center space-y-0.5">
           <div class="flex items-center justify-center gap-1 text-[11px] text-zinc-500">
             <AppIcon name="arrow-up-right" className="w-3 h-3 text-rose-600" />
             <span>Keluar</span>
@@ -106,7 +106,7 @@
         </div>
 
         <!-- Saldo Kas -->
-        <div class="bg-white rounded-2xl p-3 border border-zinc-200/80 shadow-xs text-center space-y-0.5">
+        <div class="bg-white rounded-2xl p-3 border border-zinc-100 shadow-sm text-center space-y-0.5">
           <div class="flex items-center justify-center gap-1 text-[11px] text-zinc-500">
             <AppIcon name="wallet" className="w-3 h-3 text-zinc-700" />
             <span>Saldo</span>
@@ -118,7 +118,7 @@
       </div>
 
       <!-- TAMPILAN 1: TAMPILAN KARTU PER RUMAH (Sangat User-Friendly di Layar Mobile HP) -->
-      <section v-if="viewMode === 'card'" class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs">
+      <section v-if="viewMode === 'card'" class="bg-white rounded-2xl p-4 border border-zinc-100 shadow-sm">
         <div class="flex items-center justify-between mb-3 pb-2 border-b border-zinc-100">
           <div class="flex items-center gap-1.5">
             <AppIcon name="users" className="w-4 h-4 text-emerald-600" />
@@ -170,7 +170,7 @@
       </section>
 
       <!-- TAMPILAN 2: TABEL MATRIKS (Full spreadsheet dengan sticky header & row) -->
-      <section v-else class="bg-white rounded-2xl border border-zinc-200/80 shadow-xs overflow-hidden">
+      <section v-else class="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-zinc-100 flex items-center justify-between">
           <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-700">
             Matriks Pembayaran {{ tahun }}
@@ -248,7 +248,7 @@
       </section>
 
       <!-- Daftar Rincian Pengeluaran Tahun Ini -->
-      <section class="bg-white rounded-2xl border border-zinc-200/80 shadow-xs overflow-hidden">
+      <section class="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-zinc-100 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
             <AppIcon name="receipt" className="w-4 h-4 text-rose-600" />

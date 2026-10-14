@@ -1,23 +1,23 @@
 <template>
   <!-- Halaman Kelola Warga - Clean, Mobile-First, User-Friendly -->
-  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-50/50 via-white to-zinc-50 pb-28">
     <!-- Header App Bar -->
-    <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
+    <header class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 sticky top-0 z-20 pt-safe shadow-lg shadow-emerald-900/10">
       <div class="max-w-md mx-auto px-4 pt-3.5 pb-3">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-800 flex items-center justify-center">
-              <AppIcon name="users" className="w-4 h-4 text-emerald-600" />
+            <div class="w-8 h-8 rounded-xl bg-white/20 text-white flex items-center justify-center">
+              <AppIcon name="users" className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h1 class="text-base font-bold text-zinc-900 leading-tight">Data Warga</h1>
-              <p class="text-[11px] text-zinc-400">Daftar rumah & akun warga</p>
+              <h1 class="text-base font-bold text-white leading-tight">Data Warga</h1>
+              <p class="text-[11px] text-emerald-100/80">Daftar rumah & akun warga</p>
             </div>
           </div>
 
           <div class="text-right">
-            <span class="text-xs font-bold text-zinc-900 block">{{ filteredWargas.length }} Rumah</span>
-            <span class="text-[10px] text-zinc-400">Terdaftar</span>
+            <span class="text-xs font-bold text-white block">{{ filteredWargas.length }} Rumah</span>
+            <span class="text-[10px] text-emerald-100/70">Terdaftar</span>
           </div>
         </div>
 
@@ -27,16 +27,16 @@
             v-model="search"
             type="text"
             placeholder="Cari nomor rumah atau nama warga..."
-            class="w-full pl-9 pr-8 py-2.5 bg-zinc-100/80 border border-transparent focus:border-zinc-300 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-zinc-400"
+            class="w-full pl-9 pr-8 py-2.5 bg-white/15 border border-white/20 focus:border-white/40 rounded-xl text-xs text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
           />
-          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/60">
             <AppIcon name="search" className="w-3.5 h-3.5" />
           </div>
           <button
             v-if="search"
             type="button"
             @click="search = ''"
-            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 p-0.5"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-0.5"
           >
             <AppIcon name="x" className="w-3.5 h-3.5" />
           </button>
@@ -62,7 +62,7 @@
       <div
         v-for="warga in filteredWargas"
         :key="warga.id"
-        class="bg-white rounded-2xl p-3.5 border border-zinc-200/80 shadow-xs flex items-center justify-between gap-3"
+        class="bg-white rounded-2xl p-3.5 border border-zinc-200/80 shadow-sm flex items-center justify-between gap-3"
       >
         <div class="flex items-center gap-3 min-w-0">
           <!-- House Number / Initials Avatar -->

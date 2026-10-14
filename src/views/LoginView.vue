@@ -1,18 +1,18 @@
 <template>
   <!-- Halaman Login KasNDB - Clean, Simple, Mobile-First -->
-  <div class="min-h-[100dvh] bg-zinc-50 flex flex-col justify-between px-4 py-8 sm:py-12">
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-600 via-emerald-700 to-teal-800 flex flex-col justify-between px-4 py-8 sm:py-12">
     <div class="w-full max-w-sm mx-auto my-auto">
       <!-- App Header / Logo -->
       <div class="text-center mb-7">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 mb-3.5">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/20 text-white shadow-lg shadow-emerald-950/20 border border-white/30 backdrop-blur-sm mb-3.5">
           <AppIcon name="building" className="w-7 h-7" />
         </div>
-        <h1 class="text-2xl font-bold text-zinc-900 tracking-tight">KasNDB</h1>
-        <p class="text-xs text-zinc-500 mt-1">Sistem Iuran & Transparansi Kas Perumahan</p>
+        <h1 class="text-2xl font-bold text-white tracking-tight">KasNDB</h1>
+        <p class="text-xs text-emerald-100/90 mt-1">Sistem Iuran & Transparansi Kas Perumahan</p>
       </div>
 
       <!-- Card Container -->
-      <div class="bg-white rounded-2xl shadow-sm border border-zinc-200/80 overflow-hidden">
+      <div class="bg-white rounded-2xl shadow-xl shadow-emerald-950/20 border border-zinc-100 overflow-hidden">
         <!-- Segmented Tab Selector -->
         <div class="p-1.5 bg-zinc-100/80 border-b border-zinc-200/60 grid grid-cols-2 gap-1">
           <button
@@ -174,7 +174,7 @@
 
       <!-- Footer info -->
       <div class="text-center mt-6 space-y-1">
-        <p class="text-xs text-zinc-400">
+        <p class="text-xs text-emerald-100/70">
           KasNDB © {{ new Date().getFullYear() }} — Transparansi Keuangan Warga
         </p>
       </div>

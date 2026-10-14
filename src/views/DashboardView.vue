@@ -1,29 +1,29 @@
 <template>
-  <!-- Portal Warga (Publik) - Clean, Mobile-First, User-Friendly -->
-  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
-    <!-- Header App Bar -->
-    <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
-      <div class="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-sm shadow-emerald-600/20">
+  <!-- Portal Warga (Publik) - Colorful, Mobile-First, User-Friendly -->
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-50 via-white to-zinc-50 pb-28">
+    <!-- Header App Bar with Gradient -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-600 sticky top-0 z-20 pt-safe shadow-lg shadow-emerald-900/10">
+      <div class="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center font-bold text-sm">
             {{ (wargaData?.namaDepan || authStore.user?.displayName || 'W').charAt(0).toUpperCase() }}
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="text-xs text-zinc-500 font-medium">Rumah</span>
-              <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold text-xs ring-1 ring-inset ring-emerald-600/20">
+              <span class="text-[11px] text-emerald-100/80 font-medium">Rumah</span>
+              <span class="px-2 py-0.5 rounded-md bg-white/20 text-white font-bold text-xs">
                 {{ wargaData?.nomorRumah || '—' }}
               </span>
             </div>
-            <h1 class="text-sm font-semibold text-zinc-900 leading-tight">
+            <h1 class="text-sm font-semibold text-white leading-tight">
               {{ wargaData?.namaDepan || authStore.user?.displayName || 'Warga' }}
             </h1>
           </div>
         </div>
 
         <div class="text-right">
-          <span class="text-[11px] font-medium text-zinc-400 block">{{ kasStore.settings.namaPerumahan || 'Perumahan NDB' }}</span>
-          <span class="text-xs font-semibold text-zinc-700">Tahun {{ tahunIni }}</span>
+          <span class="text-[11px] font-medium text-emerald-100/70 block">{{ kasStore.settings.namaPerumahan || 'Perumahan NDB' }}</span>
+          <span class="text-xs font-semibold text-white">Tahun {{ tahunIni }}</span>
         </div>
       </div>
     </header>
@@ -34,20 +34,20 @@
     </div>
 
     <!-- Main Content -->
-    <main v-else class="max-w-md mx-auto px-4 pt-4 space-y-4">
+    <main v-else class="max-w-md mx-auto px-4 pt-5 space-y-4">
       <!-- Status Card Bulan Berjalan -->
       <div
         :class="[
-          'rounded-2xl p-5 border shadow-xs transition-all',
+          'rounded-2xl p-5 shadow-sm transition-all relative overflow-hidden',
           sudahBayarBulanIni
-            ? 'bg-white border-emerald-200/80'
-            : 'bg-white border-rose-200/80'
+            ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60'
+            : 'bg-gradient-to-br from-rose-50 to-orange-50 border border-rose-200/60'
         ]"
       >
         <div class="flex items-start justify-between gap-3">
-          <div class="space-y-1">
+          <div class="space-y-1.5">
             <div class="flex items-center gap-2">
-              <span class="text-xs font-medium text-zinc-500">Iuran Bulan {{ namaBulanIni }}</span>
+              <span class="text-xs font-medium text-zinc-600">Iuran Bulan {{ namaBulanIni }}</span>
               <StatusBadge :status="sudahBayarBulanIni ? 'lunas' : 'belum'" size="sm" />
             </div>
             <div class="text-xl font-bold text-zinc-900">
@@ -63,21 +63,21 @@
 
           <div
             :class="[
-              'w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0',
-              sudahBayarBulanIni ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+              'w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm',
+              sudahBayarBulanIni ? 'bg-emerald-600 text-white' : 'bg-rose-100 text-rose-600'
             ]"
           >
             <AppIcon :name="sudahBayarBulanIni ? 'check-circle' : 'wallet'" className="w-6 h-6" />
           </div>
         </div>
 
-        <!-- Tombol Konfirmasi / Bayar jika belum bayar -->
-        <div v-if="!sudahBayarBulanIni" class="mt-4 pt-3.5 border-t border-zinc-100 flex items-center justify-between">
+        <!-- Tombol Konfirmasi jika belum bayar -->
+        <div v-if="!sudahBayarBulanIni" class="mt-4 pt-3.5 border-t border-rose-200/50 flex items-center justify-between">
           <span class="text-xs text-zinc-500">Sudah transfer?</span>
           <button
             type="button"
             @click="openKonfirmasiWA"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-colors"
           >
             <AppIcon name="whatsapp" className="w-3.5 h-3.5" />
             <span>Konfirmasi ke Bendahara</span>
@@ -87,17 +87,19 @@
 
       <!-- Financial Metric Cards -->
       <div class="grid grid-cols-2 gap-3">
-        <!-- Progress Lunas Warga -->
-        <div class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs">
-          <div class="flex items-center justify-between text-zinc-400 mb-2">
+        <!-- Progress Lunas -->
+        <div class="bg-white rounded-2xl p-4 border border-zinc-100 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-medium text-zinc-500">Status Pembayaran</span>
-            <AppIcon name="calendar" className="w-4 h-4 text-zinc-400" />
+            <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+              <AppIcon name="calendar" className="w-3.5 h-3.5 text-blue-600" />
+            </div>
           </div>
           <div class="flex items-baseline gap-1">
             <span class="text-2xl font-bold text-zinc-900">{{ totalBulanLunas }}</span>
             <span class="text-xs text-zinc-400 font-medium">/ 12 bulan</span>
           </div>
-          <div class="w-full bg-zinc-100 h-1.5 rounded-full mt-3 overflow-hidden">
+          <div class="w-full bg-zinc-100 h-2 rounded-full mt-3 overflow-hidden">
             <div
               class="bg-emerald-500 h-full rounded-full transition-all duration-300"
               :style="{ width: `${(totalBulanLunas / 12) * 100}%` }"
@@ -105,46 +107,50 @@
           </div>
         </div>
 
-        <!-- Saldo Kas Keseluruhan -->
-        <div class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs">
-          <div class="flex items-center justify-between text-zinc-400 mb-2">
+        <!-- Saldo Kas -->
+        <div class="bg-white rounded-2xl p-4 border border-zinc-100 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-medium text-zinc-500">Saldo Kas Bersih</span>
-            <AppIcon name="building" className="w-4 h-4 text-zinc-400" />
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
+              <AppIcon name="building" className="w-3.5 h-3.5 text-emerald-600" />
+            </div>
           </div>
           <div class="text-lg font-bold text-emerald-700 truncate">
             {{ formatRupiah(saldoKas) }}
           </div>
           <p class="text-[11px] text-zinc-400 mt-2 flex items-center gap-1">
-            <AppIcon name="check" className="w-3 h-3 text-emerald-600" />
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
             <span>Terbuka & transparan</span>
           </p>
         </div>
       </div>
 
       <!-- Rekap 12 Bulan Grid -->
-      <div class="bg-white rounded-2xl p-4.5 border border-zinc-200/80 shadow-xs">
-        <div class="flex items-center justify-between mb-3.5">
+      <div class="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-2">
-            <AppIcon name="calendar" className="w-4 h-4 text-emerald-600" />
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
+              <AppIcon name="calendar" className="w-3.5 h-3.5 text-emerald-600" />
+            </div>
             <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-700">
               Riwayat Iuran {{ tahunIni }}
             </h2>
           </div>
-          <span class="text-xs text-zinc-400 font-medium">Ketuk untuk rincian</span>
+          <span class="text-[11px] text-zinc-400 font-medium">Ketuk untuk rincian</span>
         </div>
 
-        <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+        <div class="grid grid-cols-4 sm:grid-cols-6 gap-2.5">
           <button
             v-for="(nama, idx) in namaBulanSingkat"
             :key="idx"
             type="button"
             @click="selectBulanDetail(idx + 1)"
             :class="[
-              'p-2.5 rounded-xl border flex flex-col items-center justify-center transition-all duration-150 active:scale-95',
+              'p-2.5 rounded-xl border-2 flex flex-col items-center justify-center transition-all duration-150 active:scale-95',
               pembayaranBulan[idx + 1]
-                ? 'bg-emerald-50/70 border-emerald-200 text-emerald-800'
+                ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
                 : (idx + 1 <= bulanSekarang
-                  ? 'bg-rose-50/60 border-rose-200 text-rose-700'
+                  ? 'bg-rose-50 border-rose-200 text-rose-700'
                   : 'bg-zinc-50 border-zinc-200/60 text-zinc-400')
             ]"
           >
@@ -153,7 +159,7 @@
               <AppIcon
                 v-if="pembayaranBulan[idx + 1]"
                 name="check"
-                className="w-3.5 h-3.5 text-emerald-600"
+                className="w-4 h-4 text-emerald-600"
                 :strokeWidth="2.5"
               />
               <span
@@ -170,15 +176,15 @@
 
         <div class="flex items-center justify-between pt-3 mt-3 border-t border-zinc-100 text-[11px] text-zinc-500">
           <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span>Lunas ({{ totalBulanLunas }})</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
             <span>Belum ({{ Math.max(0, bulanSekarang - totalBulanLunas) }})</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-zinc-300"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-zinc-300"></span>
             <span>Akan Datang</span>
           </div>
         </div>
@@ -188,27 +194,27 @@
       <div class="grid grid-cols-2 gap-3">
         <router-link
           to="/laporan"
-          class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-center gap-3 hover:border-emerald-300 transition-colors"
+          class="bg-amber-50 rounded-2xl p-4 border border-amber-200/60 shadow-sm flex items-center gap-3 hover:bg-amber-100/70 transition-colors active:scale-[0.98]"
         >
-          <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center flex-shrink-0">
-            <AppIcon name="chart" className="w-5 h-5 text-emerald-600" />
+          <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+            <AppIcon name="chart" className="w-5 h-5" />
           </div>
           <div class="min-w-0">
             <p class="text-xs font-semibold text-zinc-800">Laporan Kas</p>
-            <p class="text-[11px] text-zinc-400 truncate">Unduh PDF & Rekap</p>
+            <p class="text-[11px] text-zinc-500 truncate">Unduh PDF & Rekap</p>
           </div>
         </router-link>
 
         <router-link
           to="/profil"
-          class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-center gap-3 hover:border-emerald-300 transition-colors"
+          class="bg-blue-50 rounded-2xl p-4 border border-blue-200/60 shadow-sm flex items-center gap-3 hover:bg-blue-100/70 transition-colors active:scale-[0.98]"
         >
-          <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center flex-shrink-0">
-            <AppIcon name="user" className="w-5 h-5 text-emerald-600" />
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+            <AppIcon name="user" className="w-5 h-5" />
           </div>
           <div class="min-w-0">
             <p class="text-xs font-semibold text-zinc-800">Profil Saya</p>
-            <p class="text-[11px] text-zinc-400 truncate">Data Akun & Sandi</p>
+            <p class="text-[11px] text-zinc-500 truncate">Data Akun & Sandi</p>
           </div>
         </router-link>
       </div>
@@ -273,7 +279,7 @@
         <button
           type="button"
           @click="openKonfirmasiWA"
-          class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
+          class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-sm"
         >
           <AppIcon name="whatsapp" className="w-4 h-4" />
           <span>Konfirmasi ke Bendahara</span>

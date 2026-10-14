@@ -1,23 +1,23 @@
 <template>
   <!-- Halaman Kelola Pengeluaran (Kas Keluar) -->
-  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-50/50 via-white to-zinc-50 pb-28">
     <!-- Header App Bar -->
-    <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
+    <header class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 sticky top-0 z-20 pt-safe shadow-lg shadow-emerald-900/10">
       <div class="max-w-md mx-auto px-4 pt-3.5 pb-3">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+            <div class="w-8 h-8 rounded-xl bg-white/20 text-white flex items-center justify-center">
               <AppIcon name="receipt" className="w-4 h-4" />
             </div>
             <div>
-              <h1 class="text-base font-bold text-zinc-900 leading-tight">Pengeluaran Kas</h1>
-              <p class="text-[11px] text-zinc-400">Pencatatan biaya & operasional</p>
+              <h1 class="text-base font-bold text-white leading-tight">Pengeluaran Kas</h1>
+              <p class="text-[11px] text-emerald-100/80">Pencatatan biaya & operasional</p>
             </div>
           </div>
 
           <div class="text-right">
-            <span class="text-xs font-bold text-rose-600 block">{{ formatRupiah(totalTerfilter) }}</span>
-            <span class="text-[10px] text-zinc-400">Total Periode Ini</span>
+            <span class="text-xs font-bold text-white block">{{ formatRupiah(totalTerfilter) }}</span>
+            <span class="text-[10px] text-emerald-100/70">Total Periode Ini</span>
           </div>
         </div>
 
@@ -26,14 +26,14 @@
           <div class="col-span-2 relative">
             <select
               v-model="filterBulan"
-              class="w-full pl-3 pr-8 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold text-zinc-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 appearance-none transition-all"
+              class="w-full pl-3 pr-8 py-2.5 bg-white/15 border border-white/20 rounded-xl text-xs font-semibold text-white focus:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/30 appearance-none transition-all"
             >
-              <option value="">Semua Bulan</option>
-              <option v-for="(nama, idx) in namaBulan" :key="idx" :value="idx + 1">
+              <option value="" class="text-zinc-800">Semua Bulan</option>
+              <option v-for="(nama, idx) in namaBulan" :key="idx" :value="idx + 1" class="text-zinc-800">
                 Bulan {{ nama }}
               </option>
             </select>
-            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
               <AppIcon name="chevron-down" className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -42,11 +42,11 @@
             <select
               v-model="filterTahun"
               @change="loadData"
-              class="w-full pl-3 pr-7 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold text-zinc-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 appearance-none transition-all"
+              class="w-full pl-3 pr-7 py-2.5 bg-white/15 border border-white/20 rounded-xl text-xs font-semibold text-white focus:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/30 appearance-none transition-all"
             >
-              <option v-for="y in tahunOptions" :key="y" :value="y">{{ y }}</option>
+              <option v-for="y in tahunOptions" :key="y" :value="y" class="text-zinc-800">{{ y }}</option>
             </select>
-            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
               <AppIcon name="chevron-down" className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -58,16 +58,16 @@
             v-model="searchQuery"
             type="text"
             placeholder="Cari keperluan atau kategori..."
-            class="w-full pl-9 pr-8 py-2.5 bg-zinc-100/80 border border-transparent focus:border-zinc-300 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-zinc-400"
+            class="w-full pl-9 pr-8 py-2.5 bg-white/15 border border-white/20 rounded-xl text-xs text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
           />
-          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/60">
             <AppIcon name="search" className="w-3.5 h-3.5" />
           </div>
           <button
             v-if="searchQuery"
             type="button"
             @click="searchQuery = ''"
-            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 p-0.5"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-0.5"
           >
             <AppIcon name="x" className="w-3.5 h-3.5" />
           </button>
@@ -81,8 +81,8 @@
             :class="[
               'px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors text-[11px]',
               !filterKategori
-                ? 'bg-zinc-900 text-white font-semibold'
-                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                ? 'bg-white text-emerald-700 font-semibold'
+                : 'bg-white/15 text-white/80 hover:bg-white/25'
             ]"
           >
             Semua ({{ pengeluaranStore.pengeluarans.length }})
@@ -95,8 +95,8 @@
             :class="[
               'px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition-colors text-[11px]',
               filterKategori === kat
-                ? 'bg-zinc-900 text-white font-semibold'
-                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                ? 'bg-white text-emerald-700 font-semibold'
+                : 'bg-white/15 text-white/80 hover:bg-white/25'
             ]"
           >
             {{ kat }}
@@ -121,7 +121,7 @@
       <div
         v-for="item in filteredPengeluarans"
         :key="item.id"
-        class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-start justify-between gap-3"
+        class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-sm flex items-start justify-between gap-3"
       >
         <div class="min-w-0 flex-1 space-y-1">
           <div class="flex items-center gap-2">

@@ -1,47 +1,44 @@
 <template>
-  <!-- Dashboard Admin - Clean, Mobile-First, Ergonomic -->
-  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
-    <!-- Header App Bar -->
-    <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
-      <div class="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-zinc-900 text-white flex items-center justify-center shadow-sm">
-            <AppIcon name="shield" className="w-5 h-5 text-emerald-400" />
+  <!-- Dashboard Admin - Modern, Colorful, Mobile-First -->
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-50 via-white to-zinc-50 pb-28">
+    <!-- Header App Bar with Gradient -->
+    <header class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 sticky top-0 z-20 pt-safe shadow-lg shadow-emerald-900/10">
+      <div class="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center shadow-inner">
+            <AppIcon name="shield" className="w-5 h-5" />
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="text-xs font-bold text-zinc-900 leading-tight">Administrator Kas</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-semibold">Admin</span>
+              <span class="text-sm font-bold text-white leading-tight">Administrator Kas</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-white/20 text-emerald-50 font-semibold">Admin</span>
             </div>
-            <p class="text-[11px] text-zinc-500 truncate max-w-[170px]">
+            <p class="text-[11px] text-emerald-100/80 truncate max-w-[170px]">
               {{ kasStore.settings.namaPerumahan || 'Perumahan NDB' }}
             </p>
           </div>
         </div>
 
         <div class="flex items-center gap-1.5">
-          <!-- Button Settings -->
           <button
             type="button"
             @click="showSettingsModal = true"
-            class="p-2 rounded-xl text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 transition-colors"
+            class="p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors"
             title="Pengaturan Kas"
             aria-label="Pengaturan"
           >
             <AppIcon name="cog" className="w-5 h-5" />
           </button>
-          <!-- Button Logout -->
           <button
             type="button"
             @click="showLogoutConfirm = true"
-            class="p-2 rounded-xl text-zinc-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+            class="p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors"
             title="Keluar dari Akun Admin"
             aria-label="Keluar"
           >
             <AppIcon name="logout" className="w-5 h-5" />
           </button>
-          <!-- Tahun Aktif Pill -->
-          <div class="px-2.5 py-1 rounded-xl bg-zinc-100 text-zinc-700 text-xs font-semibold">
+          <div class="px-2.5 py-1 rounded-xl bg-white/15 text-white text-xs font-semibold">
             {{ tahun }}
           </div>
         </div>
@@ -54,84 +51,96 @@
     </div>
 
     <!-- Main Content -->
-    <main v-else class="max-w-md mx-auto px-4 pt-4 space-y-4">
-      <!-- 4 Ringkasan Angka Utama -->
-      <div class="grid grid-cols-2 gap-3">
-        <!-- Saldo Kas -->
-        <div class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs col-span-2">
-          <div class="flex items-center justify-between text-zinc-500 mb-1">
-            <span class="text-xs font-medium">Saldo Kas Bersih Saat Ini</span>
-            <span class="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">Aktif</span>
+    <main v-else class="max-w-md mx-auto px-4 pt-5 space-y-4">
+      <!-- Hero Saldo Card -->
+      <div class="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 rounded-2xl p-5 shadow-lg shadow-emerald-900/15 text-white relative overflow-hidden">
+        <!-- Decorative circles -->
+        <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/5"></div>
+        <div class="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-white/5"></div>
+        
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-medium text-emerald-100">Saldo Kas Bersih Saat Ini</span>
+            <span class="text-[11px] bg-white/15 px-2 py-0.5 rounded-full font-medium">Aktif</span>
           </div>
-          <div :class="['text-2xl font-bold tracking-tight', saldoKas >= 0 ? 'text-zinc-900' : 'text-rose-600']">
+          <div class="text-3xl font-bold tracking-tight mt-1">
             {{ formatRupiah(saldoKas) }}
           </div>
-          <div class="flex items-center justify-between pt-3 mt-3 border-t border-zinc-100 text-[11px] text-zinc-500">
-            <span>Pemasukan: <strong class="text-emerald-700">{{ formatRupiah(totalPemasukanSemua) }}</strong></span>
-            <span>Pengeluaran: <strong class="text-rose-600">{{ formatRupiah(pengeluaranStore.totalPengeluaran) }}</strong></span>
+          <div class="flex items-center justify-between pt-3.5 mt-3.5 border-t border-white/15 text-[11px] text-emerald-100">
+            <span>Pemasukan: <strong class="text-white">{{ formatRupiah(totalPemasukanSemua) }}</strong></span>
+            <span>Pengeluaran: <strong class="text-rose-200">{{ formatRupiah(pengeluaranStore.totalPengeluaran) }}</strong></span>
           </div>
         </div>
+      </div>
 
+      <!-- Quick Stats Row -->
+      <div class="grid grid-cols-2 gap-3">
         <!-- Pemasukan Bulan Ini -->
-        <div class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs">
-          <div class="flex items-center justify-between text-zinc-400 mb-1.5">
+        <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-medium text-zinc-500">{{ namaBulanIni }}</span>
-            <AppIcon name="arrow-down-left" className="w-4 h-4 text-emerald-600" />
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
+              <AppIcon name="arrow-down-left" className="w-3.5 h-3.5 text-emerald-600" />
+            </div>
           </div>
           <div class="text-base font-bold text-emerald-700 truncate">
             {{ formatRupiah(pemasukanBulanIni) }}
           </div>
-          <p class="text-[11px] text-zinc-400 mt-1">
+          <p class="text-[11px] text-zinc-400 mt-1.5">
             {{ lunasBulanIni }} dari {{ wargaStore.wargas.length }} rumah
           </p>
         </div>
 
         <!-- Total Warga -->
-        <div class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs">
-          <div class="flex items-center justify-between text-zinc-400 mb-1.5">
+        <div class="bg-white rounded-2xl p-4 border border-zinc-100 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-medium text-zinc-500">Total Warga</span>
-            <AppIcon name="users" className="w-4 h-4 text-zinc-400" />
+            <div class="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center">
+              <AppIcon name="users" className="w-3.5 h-3.5 text-zinc-500" />
+            </div>
           </div>
           <div class="text-base font-bold text-zinc-900">
             {{ wargaStore.wargas.length }} Rumah
           </div>
-          <p class="text-[11px] text-zinc-400 mt-1">
+          <p class="text-[11px] text-zinc-400 mt-1.5">
             Iuran {{ formatRupiah(kasStore.settings.jumlahKasBulanan) }}/bln
           </p>
         </div>
       </div>
 
       <!-- Kepatuhan Pembayaran Bulan Ini -->
-      <div class="bg-white rounded-2xl p-4.5 border border-zinc-200/80 shadow-xs">
-        <div class="flex items-center justify-between mb-2">
+      <div class="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
           <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-700">
             Kepatuhan Iuran {{ namaBulanIni }}
           </h2>
-          <span class="text-xs font-bold text-emerald-700">{{ persentaseLunas }}%</span>
+          <span :class="['text-xs font-bold px-2 py-0.5 rounded-full', persentaseLunas >= 80 ? 'bg-emerald-50 text-emerald-700' : persentaseLunas >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700']">{{ persentaseLunas }}%</span>
         </div>
 
-        <div class="h-2.5 w-full bg-zinc-100 rounded-full overflow-hidden flex">
+        <div class="h-3 w-full bg-zinc-100 rounded-full overflow-hidden">
           <div
-            class="h-full bg-emerald-500 rounded-full transition-all duration-500"
+            :class="['h-full rounded-full transition-all duration-500', persentaseLunas >= 80 ? 'bg-emerald-500' : persentaseLunas >= 50 ? 'bg-amber-500' : 'bg-rose-500']"
             :style="{ width: `${persentaseLunas}%` }"
           ></div>
         </div>
 
-        <div class="flex justify-between items-center text-xs text-zinc-500 mt-3 pt-2 border-t border-zinc-100">
-          <span class="font-medium text-emerald-700">
+        <div class="flex justify-between items-center text-xs text-zinc-500 mt-3 pt-3 border-t border-zinc-100">
+          <span class="font-medium text-emerald-700 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
             {{ lunasBulanIni }} Rumah Lunas
           </span>
-          <span class="font-medium text-rose-600">
+          <span class="font-medium text-rose-600 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
             {{ belumBulanIni }} Rumah Belum
           </span>
         </div>
       </div>
 
-      <!-- Daftar Warga Belum Bayar Bulan Ini (Aksi Cepat) -->
-      <div class="bg-white rounded-2xl p-4.5 border border-zinc-200/80 shadow-xs">
+      <!-- Daftar Warga Belum Bayar -->
+      <div class="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
             <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-700">
               Belum Bayar {{ namaBulanIni }}
             </h2>
@@ -141,9 +150,9 @@
           </span>
         </div>
 
-        <div v-if="belumBayarList.length === 0" class="py-6 text-center text-zinc-500 space-y-1">
-          <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-2">
-            <AppIcon name="check" className="w-5 h-5" :strokeWidth="2.5" />
+        <div v-if="belumBayarList.length === 0" class="py-8 text-center space-y-2">
+          <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+            <AppIcon name="check" className="w-6 h-6" :strokeWidth="2.5" />
           </div>
           <p class="text-sm font-semibold text-zinc-800">Semua Warga Sudah Lunas!</p>
           <p class="text-xs text-zinc-400">Pembayaran bulan {{ namaBulanIni }} telah 100% terkumpul.</p>
@@ -153,21 +162,19 @@
           <div
             v-for="warga in belumBayarWargas"
             :key="warga.id"
-            class="py-2.5 flex items-center justify-between gap-2"
+            class="py-3 flex items-center justify-between gap-3"
           >
-            <div class="min-w-0 flex items-center gap-2.5">
-              <span class="px-2 py-1 bg-zinc-100 text-zinc-800 font-bold text-xs rounded-lg flex-shrink-0">
+            <div class="min-w-0 flex items-center gap-3">
+              <span class="px-2.5 py-1.5 bg-zinc-100 text-zinc-800 font-bold text-xs rounded-lg flex-shrink-0">
                 {{ warga.nomorRumah }}
               </span>
-              <div class="truncate">
+              <div class="truncate min-w-0">
                 <p class="text-xs font-medium text-zinc-900 truncate">{{ warga.namaLengkap || warga.namaDepan }}</p>
                 <p class="text-[11px] text-zinc-400 truncate">{{ warga.noHp || 'No HP -' }}</p>
               </div>
             </div>
 
-            <!-- Quick Action Buttons -->
             <div class="flex items-center gap-1.5 flex-shrink-0">
-              <!-- WhatsApp Reminder Button -->
               <button
                 type="button"
                 @click="sendWAReminder(warga)"
@@ -177,11 +184,10 @@
               >
                 <AppIcon name="whatsapp" className="w-4 h-4" />
               </button>
-              <!-- Quick Pay Button -->
               <button
                 type="button"
                 @click="openQuickPay(warga)"
-                class="px-2.5 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold transition-colors flex items-center gap-1"
+                class="px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors flex items-center gap-1 shadow-sm"
               >
                 <AppIcon name="plus" className="w-3.5 h-3.5" />
                 <span>Catat</span>
@@ -195,65 +201,65 @@
       <div class="grid grid-cols-2 gap-3">
         <router-link
           to="/admin/pembayaran"
-          class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-center gap-3 hover:border-emerald-300 transition-colors"
+          class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200/60 shadow-sm flex items-center gap-3 hover:bg-emerald-100/70 transition-colors active:scale-[0.98]"
         >
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
             <AppIcon name="wallet" className="w-5 h-5" />
           </div>
           <div class="min-w-0">
             <p class="text-xs font-semibold text-zinc-800">Kas Masuk</p>
-            <p class="text-[11px] text-zinc-400 truncate">Kelola iuran warga</p>
+            <p class="text-[11px] text-zinc-500 truncate">Kelola iuran warga</p>
           </div>
         </router-link>
 
         <router-link
           to="/admin/pengeluaran"
-          class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-center gap-3 hover:border-rose-300 transition-colors"
+          class="bg-rose-50 rounded-2xl p-4 border border-rose-200/60 shadow-sm flex items-center gap-3 hover:bg-rose-100/70 transition-colors active:scale-[0.98]"
         >
-          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center flex-shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
             <AppIcon name="receipt" className="w-5 h-5" />
           </div>
           <div class="min-w-0">
             <p class="text-xs font-semibold text-zinc-800">Kas Keluar</p>
-            <p class="text-[11px] text-zinc-400 truncate">Catat biaya & belanja</p>
+            <p class="text-[11px] text-zinc-500 truncate">Catat biaya & belanja</p>
           </div>
         </router-link>
 
         <router-link
           to="/admin/warga"
-          class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-center gap-3 hover:border-emerald-300 transition-colors"
+          class="bg-blue-50 rounded-2xl p-4 border border-blue-200/60 shadow-sm flex items-center gap-3 hover:bg-blue-100/70 transition-colors active:scale-[0.98]"
         >
-          <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center flex-shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
             <AppIcon name="users" className="w-5 h-5" />
           </div>
           <div class="min-w-0">
             <p class="text-xs font-semibold text-zinc-800">Data Warga</p>
-            <p class="text-[11px] text-zinc-400 truncate">Tambah & edit rumah</p>
+            <p class="text-[11px] text-zinc-500 truncate">Tambah & edit rumah</p>
           </div>
         </router-link>
 
         <router-link
           to="/laporan"
-          class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-xs flex items-center gap-3 hover:border-emerald-300 transition-colors"
+          class="bg-amber-50 rounded-2xl p-4 border border-amber-200/60 shadow-sm flex items-center gap-3 hover:bg-amber-100/70 transition-colors active:scale-[0.98]"
         >
-          <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center flex-shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
             <AppIcon name="chart" className="w-5 h-5" />
           </div>
           <div class="min-w-0">
             <p class="text-xs font-semibold text-zinc-800">Laporan Kas</p>
-            <p class="text-[11px] text-zinc-400 truncate">Rekap & unduh PDF</p>
+            <p class="text-[11px] text-zinc-500 truncate">Rekap & unduh PDF</p>
           </div>
         </router-link>
       </div>
 
-      <!-- Tombol Keluar dari Akun Admin -->
-      <div class="pt-1">
+      <!-- Tombol Keluar -->
+      <div class="pt-1 pb-2">
         <button
           type="button"
           @click="showLogoutConfirm = true"
-          class="w-full py-3.5 px-4 bg-white hover:bg-rose-50/70 border border-zinc-200/80 hover:border-rose-200 text-zinc-600 hover:text-rose-600 rounded-2xl text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-150 shadow-xs active:scale-[0.99]"
+          class="w-full py-3.5 px-4 bg-white hover:bg-rose-50/70 border border-zinc-200/80 hover:border-rose-200 text-zinc-500 hover:text-rose-600 rounded-2xl text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:scale-[0.99]"
         >
-          <AppIcon name="logout" className="w-4 h-4 text-zinc-400 group-hover:text-rose-600" />
+          <AppIcon name="logout" className="w-4 h-4" />
           <span>Keluar dari Akun Admin</span>
         </button>
       </div>
@@ -274,7 +280,7 @@
           <input
             v-model="quickPayForm.jumlah"
             type="number"
-            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm font-semibold"
+            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm font-semibold bg-zinc-50 focus:bg-white transition-colors"
             required
           />
         </div>
@@ -286,7 +292,7 @@
           <input
             v-model="quickPayForm.tanggal"
             type="date"
-            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm"
+            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm bg-zinc-50 focus:bg-white transition-colors"
             required
           />
         </div>
@@ -299,18 +305,18 @@
             v-model="quickPayForm.keterangan"
             type="text"
             placeholder="Transfer BCA / Tunai ke bendahara"
-            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm"
+            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm bg-zinc-50 focus:bg-white transition-colors"
           />
         </div>
 
-        <div v-if="quickPayError" class="p-3 bg-rose-50 text-rose-700 rounded-xl text-xs">
+        <div v-if="quickPayError" class="p-3 bg-rose-50 text-rose-700 rounded-xl text-xs border border-rose-200">
           {{ quickPayError }}
         </div>
 
         <button
           type="submit"
           :disabled="savingPay"
-          class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white font-semibold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors min-h-[46px]"
+          class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white font-semibold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors min-h-[46px] shadow-sm"
         >
           <span v-if="savingPay" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span>{{ savingPay ? 'Menyimpan...' : 'Tandai Lunas Sekarang' }}</span>
@@ -334,7 +340,7 @@
             v-model="settingsForm.namaPerumahan"
             type="text"
             placeholder="Perumahan NDB"
-            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm"
+            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm bg-zinc-50 focus:bg-white transition-colors"
             required
           />
         </div>
@@ -347,7 +353,7 @@
             v-model="settingsForm.jumlahKasBulanan"
             type="number"
             placeholder="50000"
-            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm"
+            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm bg-zinc-50 focus:bg-white transition-colors"
             required
           />
         </div>
@@ -360,25 +366,24 @@
             v-model="settingsForm.noHpBendahara"
             type="text"
             placeholder="Contoh: 081234567890"
-            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm"
+            class="w-full px-3.5 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm bg-zinc-50 focus:bg-white transition-colors"
           />
           <p class="text-[11px] text-zinc-400 mt-1">Digunakan untuk tombol konfirmasi pembayaran warga</p>
         </div>
 
-        <div v-if="settingsMessage" class="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xs">
+        <div v-if="settingsMessage" class="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xs border border-emerald-200">
           {{ settingsMessage }}
         </div>
 
         <button
           type="submit"
           :disabled="savingSettings"
-          class="w-full py-3.5 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-semibold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors min-h-[46px]"
+          class="w-full py-3.5 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-semibold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors min-h-[46px] shadow-sm"
         >
           <span v-if="savingSettings" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span>{{ savingSettings ? 'Menyimpan...' : 'Simpan Pengaturan' }}</span>
         </button>
 
-        <!-- Opsi Keluar dari Pengaturan -->
         <div class="pt-2 border-t border-zinc-100">
           <button
             type="button"

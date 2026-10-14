@@ -1,16 +1,16 @@
 <template>
   <!-- Halaman Profil Warga - Clean, Simple, Mobile-First -->
-  <div class="min-h-[100dvh] bg-zinc-50 pb-28">
+  <div class="min-h-[100dvh] bg-gradient-to-b from-emerald-50/50 via-white to-zinc-50 pb-28">
     <!-- Header App Bar -->
-    <header class="bg-white border-b border-zinc-200/80 sticky top-0 z-20 pt-safe">
+    <header class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 sticky top-0 z-20 pt-safe shadow-lg shadow-emerald-900/10">
       <div class="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-800 flex items-center justify-center">
-            <AppIcon name="user" className="w-4 h-4 text-emerald-600" />
+          <div class="w-8 h-8 rounded-xl bg-white/20 text-white flex items-center justify-center">
+            <AppIcon name="user" className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 class="text-base font-bold text-zinc-900 leading-tight">Profil Warga</h1>
-            <p class="text-[11px] text-zinc-400">Informasi akun & riwayat</p>
+            <h1 class="text-base font-bold text-white leading-tight">Profil Warga</h1>
+            <p class="text-[11px] text-emerald-100/80">Informasi akun & riwayat</p>
           </div>
         </div>
 
@@ -18,7 +18,7 @@
           type="button"
           @click="showLogoutConfirm = true"
           :disabled="loggingOut"
-          class="p-2 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
+          class="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-xl transition-colors"
           title="Keluar dari akun"
           aria-label="Keluar"
         >
@@ -35,7 +35,7 @@
     <!-- Main Content -->
     <main v-else class="max-w-md mx-auto px-4 pt-4 space-y-4">
       <!-- Resident Identity Card -->
-      <div class="bg-white rounded-2xl p-5 border border-zinc-200/80 shadow-xs flex items-center gap-4">
+      <div class="bg-white rounded-2xl p-5 border border-emerald-100 shadow-sm flex items-center gap-4">
         <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white font-bold text-xl flex items-center justify-center flex-shrink-0 shadow-sm shadow-emerald-600/20">
           {{ (wargaData?.namaDepan || 'W').charAt(0).toUpperCase() }}
         </div>
@@ -56,7 +56,7 @@
       </div>
 
       <!-- Detail Informasi Akun -->
-      <section class="bg-white rounded-2xl border border-zinc-200/80 shadow-xs overflow-hidden">
+      <section class="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-zinc-100 flex items-center justify-between">
           <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-700">
             Rincian Akun
@@ -88,7 +88,7 @@
       </section>
 
       <!-- Ringkasan Iuran Tahun Ini -->
-      <section class="bg-white rounded-2xl border border-zinc-200/80 shadow-xs overflow-hidden">
+      <section class="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-zinc-100 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
             <AppIcon name="calendar" className="w-4 h-4 text-emerald-600" />
@@ -117,14 +117,14 @@
           </div>
         </div>
 
-        <div class="px-4 py-3 bg-zinc-50 border-t border-zinc-200/80 flex items-center justify-between">
+        <div class="px-4 py-3 bg-zinc-50 border-t border-zinc-100 flex items-center justify-between">
           <span class="text-xs font-semibold text-zinc-700">Total Iuran Dibayarkan</span>
           <span class="text-xs font-bold text-emerald-700">{{ formatRupiah(totalDibayar) }}</span>
         </div>
       </section>
 
       <!-- Informasi Akun & Kredensial Login -->
-      <div class="bg-zinc-100/80 border border-zinc-200 rounded-2xl p-4 space-y-2">
+      <div class="bg-white border border-zinc-100 rounded-2xl p-4 space-y-2 shadow-sm">
         <div class="flex items-center gap-1.5 text-zinc-700">
           <AppIcon name="info" className="w-4 h-4 text-zinc-500" />
           <h4 class="text-xs font-semibold uppercase tracking-wider">Kredensial Masuk</h4>
